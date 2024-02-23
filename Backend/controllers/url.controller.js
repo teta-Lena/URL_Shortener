@@ -2,6 +2,7 @@ const UniqueID = require("short-unique-id");
 
 const shortID = new UniqueID({ length: 8 });
 const URL_Shortener = require("../models/url.model");
+const { json } = require("body-parser");
 
 const urlController = {};
 
@@ -28,4 +29,38 @@ urlController.generateNewShortURL = async (req, res) => {
   }
 };
 
+urlController.getUrl = async (req, res) => {
+  const { shortId } = req.params;
+
+  try {
+    const originalURL = await URL_Shortener.findOneAndUpdate(
+      {
+        shortId,
+      },
+      {
+        $push: {
+          clicks: {
+            timestamp: Date.now(),
+          },
+        },
+      }
+    );
+    res.redirect(originalURL.redirectURL), json({ message: "OK" });
+  } catch (error) {
+    res.status(500).json({ message: `Error ${error} occured !` });
+  }
+};
+
+urlController.analytics = async (req, res) => {
+  const { shortId } = req.params;
+  try {
+    const url = await URL_Shortener.findOne({ shortId });
+    return res.json({
+      totalClicks: url.clicks.length,
+      analytics: url.clicks,
+    });
+  } catch (err) {
+    res.status(500).json({ message: `Error ${error} occured !` });
+  }
+};
 module.exports = urlController;

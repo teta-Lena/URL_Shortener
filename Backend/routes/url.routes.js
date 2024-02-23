@@ -11,4 +11,6 @@ router.post(
   urlController.generateNewShortURL
 );
 
+router.get("/:shortId", urlController.getUrl);
+router.get("/analytics/:shortId", urlController.analytics);
 module.exports = router;
