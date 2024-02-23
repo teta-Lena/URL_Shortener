@@ -11,11 +11,12 @@ require("./config/dbconfig").connect();
 
 app.use(express.json());
 app.use(
-  cors({
-    origin: ["https://deploy-mern-lwhq.vercel.app"],
-    methods: ["POST", "GET"],
-    credentials: true,
-  })
+  cors()
+  //   {
+  //   origin: ["https://deploy-mern-lwhq.vercel.app"],
+  //   methods: ["POST", "GET"],
+  //   credentials: true,
+  // }
 );
 app.use(express.urlencoded({ extended: true }));
 app.use(
