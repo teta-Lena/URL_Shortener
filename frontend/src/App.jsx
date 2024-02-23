@@ -5,6 +5,7 @@ import UrlShortening from "./pages/UrlShortening";
 import ProtectedRoute from "./components/ProtectedRoute";
 import WelcomePage from "./pages/WelcomePage";
 import SignUp from "./pages/Signup";
+import RedirectedURL from "./pages/RedirectedURL";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<WelcomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/newaccount" element={<SignUp />} />
+        <Route path="/:shortId" element={<RedirectedURL />} />
 
         <Route
           path="/urlshortener"

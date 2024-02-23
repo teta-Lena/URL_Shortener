@@ -34,7 +34,7 @@ urlController.generateNewShortURL = async (req, res) => {
       expiresAt: expiryDate,
     });
 
-    return res.status(200).json({ shortId: newURL });
+    return res.status(200).json({ message: "Success", shortId: newURL });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
@@ -57,6 +57,8 @@ urlController.getUrl = async (req, res) => {
         },
       }
     );
+    console.log("here");
+
     res.redirect(originalURL.redirectURL), json({ message: "OK" });
   } catch (error) {
     res.status(500).json({ message: `Error ${error} occured !` });

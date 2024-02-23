@@ -4,13 +4,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
+import { useState } from "react";
 const validSchema = yup.object().shape({
   url: yup.string().required("The URL is required").url(),
 });
 
 const UrlShortening = () => {
   const navigate = useNavigate();
+  const [shortUrl, setShortUrl] = useState();
   const {
     register,
     handleSubmit,
@@ -24,7 +25,7 @@ const UrlShortening = () => {
       const res = await axios.post("/u/generateurl", urllink);
       console.log(res);
       toast.success(res.data.message);
-      // navigate("/dashboard");
+      setShortUrl(res.data.shortId);
     } catch (e) {
       console.log(e.response);
       if (e.response.status == 404) {
@@ -32,9 +33,8 @@ const UrlShortening = () => {
       }
       toast.error(e.response.data.message);
     }
+    reset();
   };
-  reset();
-
   return (
     <div>
       <div className="w-2/4 m-auto justify-around">
@@ -69,6 +69,23 @@ const UrlShortening = () => {
             />
           </div>
         </form>
+        {shortUrl && (
+          <div className="flex w-full my-5 mx-12">
+            <p className="p-3.5 font-bold text-blue-600">
+              Short URL:
+              {/* <input type="text" value={shortUrl} readOnly className="inline" /> */}
+              <a href={shortUrl} target="_blank" rel="noreferrer">
+                {shortUrl}
+              </a>
+            </p>
+            <button
+              onClick={() => navigator.clipboard.writeText(shortUrl)}
+              className="bg-[#293241]  text-white font-bold border border-gray-300 text-sm rounded-lg p-2.5"
+            >
+              Copy URL
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
