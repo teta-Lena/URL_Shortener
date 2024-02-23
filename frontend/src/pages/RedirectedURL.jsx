@@ -10,8 +10,9 @@ const RedirectedURL = () => {
   const newLink = async () => {
     try {
       const res = await axios.get(`/u/${shortId}`);
-      console.log(res);
+      console.log(res.data);
       if (res.data.message == "OK") {
+        console.log(res.data.redirectURL);
         navigate(res.data.redirectURL);
       }
     } catch (e) {
