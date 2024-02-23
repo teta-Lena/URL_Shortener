@@ -23,6 +23,8 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const res = await axios.post("/users/signup", credentials);
+      console.log("Response:", res); // Log the response object
+      console.log("Data:", res.data);
       console.log(res.data);
       toast.success(res.data.message);
       localStorage.setItem("token", res.data.token);
