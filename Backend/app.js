@@ -23,5 +23,6 @@ app.get("/welcome", (req, res) => {
 });
 
 app.use("/", routes);
+// app.use("./netlify/functions/api", router);
 
 module.exports = app;

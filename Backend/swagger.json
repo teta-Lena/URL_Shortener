@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "MIS",
-    "description": "MIS made by Ishimwe Teta Lena",
+    "title": "URL Shortener",
+    "description": "URL shortener made by Ishimwe Teta Lena",
     "contact": {
       "name": " Tlxna Ishimwe",
       "email": "tetalenaa@gmail.com"
@@ -17,13 +17,8 @@
       "description": "User CRUD"
     }
   ],
-  "schemes": [
-    "http",
-    "https"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "schemes": ["http", "https"],
+  "produces": ["application/json"],
   "paths": {
     "/users/signup": {
       "post": {
@@ -51,6 +46,9 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "409": {
             "description": "Conflict"
@@ -85,13 +83,13 @@
           "400": {
             "description": "Bad Request"
           },
-          "401": {
-            "description": "Unauthorized"
+          "404": {
+            "description": "Not Found"
           }
         }
       }
     },
-    "/employee/create-employee": {
+    "/u/generateurl": {
       "post": {
         "description": "",
         "parameters": [
@@ -101,34 +99,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "firstname": {
-                  "example": "any"
-                },
-                "lastname": {
-                  "example": "any"
-                },
-                "nationalId": {
-                  "example": "any"
-                },
-                "telephone": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "department": {
-                  "example": "any"
-                },
-                "position": {
-                  "example": "any"
-                },
-                "laptopManufacturer": {
-                  "example": "any"
-                },
-                "laptopModel": {
-                  "example": "any"
-                },
-                "laptopSerialNumber": {
+                "url": {
                   "example": "any"
                 }
               }
@@ -136,8 +107,53 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/u/{shortId}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "shortId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/u/analytics/{shortId}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "shortId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "500": {
             "description": "Internal Server Error"

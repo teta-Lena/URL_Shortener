@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,7 +11,7 @@ const validSchema = yup.object().shape({
   password: yup.string().required("Password is required"),
 });
 
-const Login = () => {
+const SignUp = () => {
   const navigate = useNavigate();
   const {
     register,
@@ -19,15 +19,14 @@ const Login = () => {
     formState: { errors },
     reset,
   } = useForm({ resolver: yupResolver(validSchema) });
-
   const onSubmitHandler = async (credentials, e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/users/login", credentials);
-      console.log(res);
+      const res = await axios.post("/users/signup", credentials);
+      console.log(res.data);
       toast.success(res.data.message);
       localStorage.setItem("token", res.data.token);
-      navigate("/urlshortener");
+      navigate("/login");
     } catch (e) {
       console.log(e.response);
       if (e.response.status == 404) {
@@ -38,17 +37,31 @@ const Login = () => {
 
     reset();
   };
-
   return (
     <div className=" w-full h-full flex ">
+      <div className="w-2/4 bg-[#3D5A80] h-[100vh]">
+        <div className="flex flex-col justify-around h-full my-auto">
+          <div className="justify-center flex flex-col items-center">
+            <p className="font-bold m-auto text-4xl text-black text-center">
+              Tlxna-ly
+            </p>
+            <p className="font-bold m-auto text-xl text-white w-[75%] text-center">
+              URL shortening application
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="w-2/4 m-auto justify-around">
         <form
           className="w-[60%] m-auto"
           onSubmit={handleSubmit(onSubmitHandler)}
         >
           <div className=" flex-col justify-center my-10">
-            <p className="font-bold text-3xl text-center">Login</p>
-            <p className="text-gray-400 text-center">Log in to continue....</p>
+            <p className="font-bold text-3xl text-center">SIGN UP</p>
+            <p className="text-gray-400 text-center">
+              Sign up to use the URL shortening app
+            </p>
           </div>
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900">
@@ -81,20 +94,20 @@ const Login = () => {
           <div>
             <input
               type="submit"
-              value={"Login"}
+              value={"Sign up"}
               className="bg-[#293241]  text-white font-bold border border-gray-300 text-sm rounded-lg block w-full p-2.5"
             />
           </div>
           <p className="my-4 mx-20">
             {" "}
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <button
               className="text-[#0d4bb8] font-bold mx-4"
               onClick={() => {
-                navigate("/newaccount");
+                navigate("/login");
               }}
             >
-              Sign up
+              Login
             </button>
           </p>
         </form>
@@ -103,4 +116,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

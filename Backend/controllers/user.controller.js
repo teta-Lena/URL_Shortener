@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("../config/dbconfig");
-const User = require("../models/users.model");
+const { User, validation } = require("../models/users.model");
 
 const userController = {};
 
@@ -12,17 +12,18 @@ userController.signup = async (req, res) => {
   if (error) {
     res.status(404).send({ message: `Error encounted ${error}` });
   }
+  const existingUser = await User.findOne({ email: email });
+  if (existingUser) {
+    return res.status(400).json({ message: "User already exists" });
+  }
   try {
-    const existingUser = await User.findOne({ where: { email } });
-
-    if (existingUser) {
-      return res.status(409).json({ message: "User already exists" });
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ email, hashedPassword });
 
-    res.status(201).json({ newUser });
+    const newUser = await User.create({ email, password: hashedPassword });
+
+    res
+      .status(201)
+      .json({ message: "User created successfully", json: newUser });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -48,13 +49,12 @@ userController.login = async (req, res) => {
     const validpass = await bcrypt.compare(password, user.password);
 
     if (!validpass) {
-      return res.status(404).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, {
       expiresIn: "1h",
     });
-
     res.json({ token, message: "Logged in successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });

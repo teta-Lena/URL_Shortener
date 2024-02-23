@@ -4,8 +4,8 @@ const endpointsFiles = ["./routes/index.js"];
 const doc = {
   info: {
     version: "1.0.0",
-    title: "MIS",
-    description: "MIS made by Ishimwe Teta Lena",
+    title: "URL Shortener",
+    description: "URL shortener made by Ishimwe Teta Lena",
     contact: {
       name: " Tlxna Ishimwe",
       email: "tetalenaa@gmail.com",

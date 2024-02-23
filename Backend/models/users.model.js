@@ -6,7 +6,6 @@ const schema = mongoose.Schema(
   {
     email: {
       type: String,
-      unique: true,
       required: true,
     },
     password: {
@@ -37,7 +36,7 @@ const validation = (body) => {
   return Joi.object()
     .keys({
       email: Joi.string().email().required(),
-      password: Joi.string().required(),
+      password: Joi.string(),
     })
     .validate(body);
 };

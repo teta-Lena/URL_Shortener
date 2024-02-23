@@ -75,6 +75,7 @@ urlController.analytics = async (req, res) => {
     res.status(500).json({ message: `Error ${error} occured !` });
   }
 };
+
 urlController.deleteExpiredURLs = async () => {
   try {
     await URL_Shortener.deleteMany({ expiresAt: { $lte: new Date() } });
@@ -82,4 +83,11 @@ urlController.deleteExpiredURLs = async () => {
     console.error("Error deleting expired URLs:", error);
   }
 };
+
+const runDeleteExpiredUrls = async () => {
+  await urlController.deleteExpiredURLs();
+  setTimeout(runDeleteExpiredUrls, 24 * 60 * 60 * 1000);
+};
+
+runDeleteExpiredUrls();
 module.exports = urlController;
