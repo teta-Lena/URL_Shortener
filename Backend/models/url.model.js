@@ -11,9 +11,10 @@ const urlSchema = mongoose.Schema(
     redirectURL: {
       type: String,
       required: true,
+      unique: true,
     },
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 const URL_Shortener = mongoose.model("urlShortener", urlSchema);

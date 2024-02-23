@@ -13,6 +13,12 @@ urlController.generateNewShortURL = async (req, res) => {
     return res.status(404).json({ message: "URL is required" });
   }
 
+  const existingurl = await URL_Shortener.findOne({ redirectURL: url });
+
+  if (existingurl) {
+    return res.status(400).json({ message: "Short URL link already exists!" });
+  }
+
   const newURL = shortID.rnd();
 
   try {
