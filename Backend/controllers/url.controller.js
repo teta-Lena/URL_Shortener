@@ -82,7 +82,7 @@ urlController.deleteExpiredURLs = async () => {
   try {
     await URL_Shortener.deleteMany({ expiresAt: { $lte: new Date() } });
   } catch (err) {
-    console.error("Error deleting expired URLs:", error);
+    console.log("Error deleting expired URLs:", err);
   }
 };
 
