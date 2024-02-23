@@ -24,7 +24,7 @@ app.use(
   swaggerUi.setup(swaggerJSDOC, { explorer: true })
 );
 
-app.get("/welcome", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Welcome home");
 });
 
