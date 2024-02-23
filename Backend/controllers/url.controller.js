@@ -1,7 +1,8 @@
 const UniqueID = require("short-unique-id");
 
 const shortID = new UniqueID({ length: 8 });
-const URL_Shortener = require("../models/url.model");
+
+const { URL_Shortener, stringIsAValidUrl } = require("../models/url.model");
 const { json } = require("body-parser");
 
 const urlController = {};
@@ -13,6 +14,10 @@ urlController.generateNewShortURL = async (req, res) => {
     return res.status(404).json({ message: "URL is required" });
   }
 
+  if (stringIsAValidUrl(url) == false) {
+    return res.status(400).json({ message: "This is not a valid URL" });
+  }
+
   const existingurl = await URL_Shortener.findOne({ redirectURL: url });
 
   if (existingurl) {
@@ -20,12 +25,13 @@ urlController.generateNewShortURL = async (req, res) => {
   }
 
   const newURL = shortID.rnd();
-
+  const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
   try {
     await URL_Shortener.create({
       shortId: newURL,
       redirectURL: url,
       clicks: [],
+      expiresAt: expiryDate,
     });
 
     return res.status(200).json({ shortId: newURL });
@@ -67,6 +73,13 @@ urlController.analytics = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: `Error ${error} occured !` });
+  }
+};
+urlController.deleteExpiredURLs = async () => {
+  try {
+    await URL_Shortener.deleteMany({ expiresAt: { $lte: new Date() } });
+  } catch (err) {
+    console.error("Error deleting expired URLs:", error);
   }
 };
 module.exports = urlController;

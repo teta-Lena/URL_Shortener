@@ -19,4 +19,13 @@ const urlSchema = mongoose.Schema(
 
 const URL_Shortener = mongoose.model("urlShortener", urlSchema);
 
-module.exports = URL_Shortener;
+const stringIsAValidUrl = (s) => {
+  try {
+    new URL(s);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
+module.exports = { URL_Shortener, stringIsAValidUrl };
