@@ -87,7 +87,7 @@ const Login = () => {
           </div>
           <p className="my-4 mx-20">
             {" "}
-            Don't have an account?{" "}
+            <p> Don't have an account?</p>
             <button
               className="text-[#0d4bb8] font-bold mx-4"
               onClick={() => {
